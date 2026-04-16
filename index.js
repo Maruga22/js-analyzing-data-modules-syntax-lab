@@ -1,40 +1,39 @@
-
-// index.js or lab.js
+// At the top - import datejs
 require('datejs');
 
+// The function
 function combineUsers(...args) {
-  // 1. Initialize the return object
+  // Initialize the object
   const combinedObject = {
     users: []
   };
   
-  // 2. Merge arrays (logic goes here)
+  // Merge all arrays using spread operator
+  for (let i = 0; i < args.length; i++) {
+    combinedObject.users = [...combinedObject.users, ...args[i]];
+  }
   
-// Loop through each array provided to the function
-for (let i = 0; i < args.length; i++) {
-  // Merge the current array into the 'users' array using the spread operator
-  combinedObject.users = [...combinedObject.users, ...args[i]];
-}
-
-  // 3. Add the date (logic goes here)
+  // Add today's date in M/d/yyyy format
+  const today = new Date();
+  combinedObject.merge_date = today.toString('M/d/yyyy');
   
-// Create a new Date object and format it using datejs
-const today = new Date();
-combinedObject.merge_date = today.toString('M/d/yyyy');
-
-  // 4. Return the object
+  // Return the object
   return combinedObject;
 }
 
+// EXPORT the function (THIS IS CRITICAL FOR TESTING)
+module.exports = { combineUsers };
 
-module.exports = {
-  ...(typeof combineUsers !== 'undefined' && { combineUsers })
-};
+// Test your function
+const result = combineUsers(
+  ['user1', 'user2'],
+  ['user3', 'user4'],
+  ['user5']
+);
 
-// Test case
-const reporters = ['Alan', 'Barbara'];
-const engineers = ['Charles', 'Diana'];
-const designers = ['Eve'];
-
-const result = combineUsers(reporters, engineers, designers);
-console.log(result);
+console.log('Return type:', typeof result); // Should be 'object'
+console.log('Has users property:', result.hasOwnProperty('users')); // Should be true
+console.log('Has merge_date property:', result.hasOwnProperty('merge_date')); // Should be true
+console.log('Users array length:', result.users.length); // Should be 5
+console.log('Merge date format:', result.merge_date); // Should be like "4/16/2026"
+console.log('Full result:', result);
